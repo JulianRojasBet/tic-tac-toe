@@ -1,10 +1,10 @@
 <script lang="ts">
   import PlayerEnum from "$lib/enums/PlayerEnum";
 
-  export let player;
+  export let playing;
 
-  $: isOne = player === PlayerEnum.ONE;
-  $: isTwo = player === PlayerEnum.TWO;
+  $: isOne = playing === PlayerEnum.ONE;
+  $: isTwo = playing === PlayerEnum.TWO;
 </script>
 
 <div class="score">

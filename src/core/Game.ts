@@ -1,38 +1,27 @@
 import type { Writable } from "svelte/store";
+import type Match from "src/core/match/Match";
 
-import { get, writable } from "svelte/store";
-import GameModeEnum from "$lib/enums/GameModeEnum";
+import { writable } from "svelte/store";
+
 import PlayerEnum from "$lib/enums/PlayerEnum";
+import GameModeEnum from "$lib/enums/GameModeEnum";
+import ComputerMatch from "./match/ComputerMatch";
+import LocalMatch from "./match/LocalMatch";
+import NetworkMatch from "./match/NetworkMatch";
 
-export default class Game {
-  public mode = GameModeEnum.COMPUTER;
-  public player: Writable<PlayerEnum>;
-  public playing: Writable<PlayerEnum>;
+class Game {
+  public player: Writable<PlayerEnum>
 
-  constructor(mode = GameModeEnum.COMPUTER) {
-    this.mode = mode;
-    this.player = writable(PlayerEnum.NONE);
-    this.playing = writable(PlayerEnum.NONE);
+  constructor(player = PlayerEnum.ONE) {
+    this.player = writable(player);
   }
 
-  public changeTurn(): void {
-		const nextTurn: Record<PlayerEnum, PlayerEnum> = { 
-      [PlayerEnum.NONE]: PlayerEnum.ONE,
-      [PlayerEnum.ONE]: PlayerEnum.TWO,
-      [PlayerEnum.TWO]: PlayerEnum.ONE,
-    };
-		this.playing.set(nextTurn[get(this.playing)]);
-
-    this.changePlayer()
-	}
-
-  private changePlayer(): void {
-    const player = get(this.player);
-    const isNone = player === PlayerEnum.NONE;
-    const isNetwork = this.mode === GameModeEnum.NETWORK;
-
-    if (isNetwork && !isNone) return
-
-    this.player.set(get(this.playing));
+  public start(mode = GameModeEnum.COMPUTER): Match {
+    let match = new ComputerMatch(this);
+    if (mode === GameModeEnum.NETWORK) match = new NetworkMatch(this);
+    else if (mode === GameModeEnum.LOCAL) match = new LocalMatch(this);
+    return match;
   }
 }
+
+export default Game;

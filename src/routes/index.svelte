@@ -11,33 +11,38 @@
 	import GameModes from '$lib/components/GameModes.svelte';
 
 	let game = new Game();
-	let board = new Board(game);
+	let match = game.start()
+	let board = new Board(match);
 
-	$: ({ player, playing } = game);
+	$: ({ player } = game);
+	$: ({ gamemode, playing } = match);
 	$: ({ rows } = board);
+	$: boardDisabled = $playing !== $player;
+	$: console.log($playing, $player)
 
 	setContext('player', player);
 
-	$: boardDisabled = $playing !== $player;
-
 	function handleSeletTile(evt) {
+		if (boardDisabled) return;
+
 		const position: TilePosition = evt.detail;
 		board.selectTile(position);
 	}
 
 	function handleGameModeSelect(evt) {
-		game = new Game(evt.detail);
-		board = new Board(game);
+		game = new Game();
+		match = game.start(evt.detail);
+		board = new Board(match);
 	}
 </script>
 
 <!-- TODO: Create a countdown for each player turn -->
 <div class="h-full flex flex-col items-center justify-center">
 	<section class="flex flex-col">
-		<Score player={$player} />
+		<Score playing={$playing} />
 		<GameBoard rows={$rows} on:select={handleSeletTile} disabled={boardDisabled} />
 	</section>
-	<GameModes gameMode={game.mode} on:select={handleGameModeSelect} />
+	<GameModes gameMode={gamemode} on:select={handleGameModeSelect} />
 </div>
 
 <!-- TODO: Add sounds: On click, on win, on lose, etc -->

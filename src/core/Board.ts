@@ -1,4 +1,4 @@
-import type Game from "./Game";
+import type Match from "src/core/match/Match";
 import type { Writable } from "svelte/store";
 import type { BoardRows, TilePosition } from "src/types";
 
@@ -7,10 +7,10 @@ import PlayerEnum from "$lib/enums/PlayerEnum";
 
 export default class Board {
   public rows: Writable<BoardRows>;
-  private game: Game;
+  private match: Match;
 
-  constructor (game: Game) {
-    this.game = game;
+  constructor (match: Match) {
+    this.match = match;
 
     const threeElements: [number, number, number] = [0, 1, 2];
     const rows = threeElements.map(
@@ -29,7 +29,7 @@ export default class Board {
     const _rows = get(this.rows);
     if (_rows[x][y].selected) return
 
-    const player = get(this.game.player);
+    const player = get(this.match.playing);
 
     if (player !== PlayerEnum.NONE) {
       _rows[x][y] = { 
@@ -40,6 +40,6 @@ export default class Board {
       this.rows.set(_rows);
     };
 
-    this.game.changeTurn();
+    this.match.changeTurn();
   }
 }
