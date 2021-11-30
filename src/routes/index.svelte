@@ -3,8 +3,8 @@
 
 	import { setContext } from 'svelte';
 
-	import Game from 'src/core/Game';
-	import Board from 'src/core/Board';
+	import Game from '$core/game/Game';
+	import Board from '$core/Board';
 
 	import GameBoard from '$lib/components/GameBoard.svelte';
 	import Score from '$lib/components/Score.svelte';
@@ -18,7 +18,6 @@
 	$: ({ gamemode, playing } = match);
 	$: ({ rows } = board);
 	$: boardDisabled = $playing !== $player;
-	$: console.log($playing, $player)
 
 	setContext('player', player);
 

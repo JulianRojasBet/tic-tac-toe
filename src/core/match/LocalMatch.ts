@@ -1,6 +1,6 @@
-import type Game from "src/core/Game";
+import type Game from "$core/game/Game";
 
-import Match from "src/core/match/Match";
+import Match from "$core/match/Match";
 import GameModeEnum from "$lib/enums/GameModeEnum";
 
 class LocalMatch extends Match {

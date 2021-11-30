@@ -1,4 +1,4 @@
-import type Game from "src/core/Game";
+import type Game from "$core/game/Game";
 import type { Writable } from "svelte/store";
 
 import { get, writable } from "svelte/store";

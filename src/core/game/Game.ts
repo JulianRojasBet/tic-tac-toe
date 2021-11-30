@@ -1,15 +1,16 @@
 import type { Writable } from "svelte/store";
-import type Match from "src/core/match/Match";
+import type Match from "$core/match/Match";
+import type GameFactory from "$core/game/GameFactory";
 
 import { writable } from "svelte/store";
 
 import PlayerEnum from "$lib/enums/PlayerEnum";
 import GameModeEnum from "$lib/enums/GameModeEnum";
-import ComputerMatch from "./match/ComputerMatch";
-import LocalMatch from "./match/LocalMatch";
-import NetworkMatch from "./match/NetworkMatch";
+import ComputerMatch from "$core/match/ComputerMatch";
+import LocalMatch from "$core/match/LocalMatch";
+import NetworkMatch from "$core/match/NetworkMatch";
 
-class Game {
+class Game implements GameFactory {
   public player: Writable<PlayerEnum>
 
   constructor(player = PlayerEnum.ONE) {

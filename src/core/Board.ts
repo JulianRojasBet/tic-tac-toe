@@ -1,4 +1,4 @@
-import type Match from "src/core/match/Match";
+import type Match from "$core/match/Match";
 import type { Writable } from "svelte/store";
 import type { BoardRows, TilePosition } from "src/types";
 
