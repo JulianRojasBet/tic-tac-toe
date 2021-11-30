@@ -4,6 +4,7 @@ import type PlayerEnum from "$lib/enums/PlayerEnum";
 import type { Writable } from "svelte/store";
 
 interface GameFactory {
+  uuid: UUID;
   player: Writable<PlayerEnum>;
 
   start(mode: GameModeEnum): Match;

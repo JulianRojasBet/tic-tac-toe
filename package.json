@@ -32,6 +32,8 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"daisyui": "^1.16.2"
+		"@supabase/supabase-js": "^1.28.2",
+		"daisyui": "^1.16.2",
+		"uuid": "^8.3.2"
 	}
 }

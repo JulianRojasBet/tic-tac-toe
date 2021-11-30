@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { TilePosition } from 'src/types';
 
-	import { setContext } from 'svelte';
+	import { onMount, setContext } from 'svelte';
+	import { page } from '$app/stores';
 
 	import Game from '$core/game/Game';
 	import Board from '$core/Board';
@@ -9,6 +10,17 @@
 	import GameBoard from '$lib/components/GameBoard.svelte';
 	import Score from '$lib/components/Score.svelte';
 	import GameModes from '$lib/components/GameModes.svelte';
+	import GameModeEnum from '$lib/enums/GameModeEnum';
+	import PlayerEnum from '$lib/enums/PlayerEnum';
+
+	onMount(() => {
+		const gameId = $page.query.get('gameId')
+		if (gameId) {
+			game = new Game(PlayerEnum.TWO, gameId);
+			match = game.start(GameModeEnum.NETWORK);
+			board = new Board(match);
+		}
+	})
 
 	let game = new Game();
 	let match = game.start()
@@ -28,7 +40,7 @@
 		board.selectTile(position);
 	}
 
-	function handleGameModeSelect(evt) {
+	function startMatch(evt) {
 		game = new Game();
 		match = game.start(evt.detail);
 		board = new Board(match);
@@ -41,7 +53,7 @@
 		<Score playing={$playing} />
 		<GameBoard rows={$rows} on:select={handleSeletTile} disabled={boardDisabled} />
 	</section>
-	<GameModes gameMode={gamemode} on:select={handleGameModeSelect} />
+	<GameModes gameMode={gamemode} on:select={startMatch} />
 </div>
 
 <!-- TODO: Add sounds: On click, on win, on lose, etc -->
