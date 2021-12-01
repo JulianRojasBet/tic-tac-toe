@@ -18,6 +18,7 @@ class Game implements GameFactory {
   constructor(player = PlayerEnum.ONE, id = uuid()) {
     this.player = writable(player);
     this.uuid = id;
+    console.log('Game:', this.uuid);
   }
 
   public start(mode = GameModeEnum.COMPUTER): Match {
