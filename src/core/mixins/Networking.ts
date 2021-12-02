@@ -1,6 +1,7 @@
 import type { SupabaseRealtimePayload } from "@supabase/supabase-js";
 
 import type Game from "$core/game/Game";
+import type { TilePosition } from "src/types";
 
 import supabase from "$lib/utils/supabase";
 import { servers } from "$lib/utils/webRTC";
@@ -27,6 +28,7 @@ abstract class Networking {
   private gameId: UUID;
   protected channel: RTCDataChannel;
   protected connection: RTCPeerConnection;
+  protected onmessage: (event: TilePosition) => void
 
   constructor(game: Game) {
     this.gameId = game.uuid
@@ -46,7 +48,7 @@ abstract class Networking {
     if (error) throw error;
 
     this.channel = this.connection.createDataChannel(this.gameId, { negotiated: false });
-    this.channel.onopen = this.handleChannelOpen.bind(this);
+    this.channel.onmessage = this.handleMessage.bind(this);
 
     this.connection.onicecandidate = (evt) => this.handleIceCandidate('offer', evt)
 
@@ -121,19 +123,13 @@ abstract class Networking {
   }
 
   private handleDataChannel({ channel }: RTCDataChannelEvent) {
-    console.log('Channel received');
     this.channel = channel;
-    this.channel.onopen = this.handleChannelOpen.bind(this);
+    this.channel.onmessage = this.handleMessage.bind(this);
   }
 
-  private handleChannelOpen() {
-    console.log('Channel opened');
-    this.channel.onmessage = this.handleMessage;
-    this.channel.send('Hello player here!');
-  }
-
-  private handleMessage({ data }: MessageEvent) {
-    console.log(data)
+  private handleMessage({ data }: MessageEvent<string>) {
+    const message = JSON.parse(data)
+    this.onmessage(message)
   }
 
   private async handleAnswer(payload: SupabaseRealtimePayload<RTCGame>) {
@@ -148,6 +144,10 @@ abstract class Networking {
         .on('INSERT', this.handleRemoteIceCandidate.bind(this))
         .subscribe();
     }
+  }
+
+  public send(data): void {
+    this.channel.send(JSON.stringify(data));
   }
 }
 
