@@ -14,7 +14,7 @@ class NetworkMatch extends Mixin(Networking, Match) {
   constructor(game: Game) {
     super(game, GameModeEnum.NETWORK);
 
-    this.onmessage = this.onMessage
+    this.onmessage = this.onMessage.bind(this)
 
     const player = get(this.game.player);
     if (player === PlayerEnum.ONE) this.createOffer()
@@ -22,13 +22,19 @@ class NetworkMatch extends Mixin(Networking, Match) {
 
   }
 
-  changeTurn(): void {
+  changeTurn(position?: TilePosition): void {
+    const player = get(this.game.player)
+    const playing = get(this.playing)
+    if (position && player === playing) {
+      this.send(position);
+    }
+
     super.changeTurn();
-    // TODO: Send event throught WebRTC datachannel
   }
 
   private onMessage(message: TilePosition) {
     console.log(message)
+    this.onselectile(message)
   }
 }
 

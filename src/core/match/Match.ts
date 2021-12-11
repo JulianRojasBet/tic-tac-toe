@@ -1,4 +1,5 @@
 import type Game from "$core/game/Game";
+import type { TilePosition } from 'src/types';
 import type { Writable } from "svelte/store";
 
 import { get, writable } from "svelte/store";
@@ -16,6 +17,7 @@ abstract class Match {
   public game: Game
   public gamemode: GameModeEnum
   public playing: Writable<PlayerEnum>;
+  public onselectile: (position: TilePosition) => void
 
   constructor(game: Game, gamemode = GameModeEnum.COMPUTER) {
     this.game = game;
@@ -25,6 +27,7 @@ abstract class Match {
 
   changeTurn(): void {
 		this.playing.set(nextTurn[get(this.playing)]);
+    console.log('playing', get(this.playing))
   }
 
 }
