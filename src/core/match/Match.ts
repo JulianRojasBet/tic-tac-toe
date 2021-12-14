@@ -17,7 +17,7 @@ abstract class Match {
   public game: Game
   public gamemode: GameModeEnum
   public playing: Writable<PlayerEnum>;
-  public onselectile: (position: TilePosition) => void
+  public onselect: (position: TilePosition) => void
 
   constructor(game: Game, gamemode = GameModeEnum.COMPUTER) {
     this.game = game;

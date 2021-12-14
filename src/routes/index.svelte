@@ -37,12 +37,13 @@
 		if (boardDisabled) return;
 
 		const position: TilePosition = evt.detail;
-		board.selectTile(position);
+		board.select(position);
 	}
 
 	function startMatch(evt) {
+		const mode = evt.detail
 		game = new Game();
-		match = game.start(evt.detail);
+		match = game.start(mode);
 		board = new Board(match);
 	}
 </script>

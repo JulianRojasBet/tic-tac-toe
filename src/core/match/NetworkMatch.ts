@@ -33,8 +33,7 @@ class NetworkMatch extends Mixin(Networking, Match) {
   }
 
   private onMessage(message: TilePosition) {
-    console.log(message)
-    this.onselectile(message)
+    this.onselect(message)
   }
 }
 

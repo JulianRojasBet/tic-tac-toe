@@ -72,6 +72,7 @@ abstract class Networking {
     this.connection.onicecandidate = (evt) => this.handleIceCandidate('answer', evt)
     this.connection.ondatachannel = this.handleDataChannel.bind(this);
 
+    // TODO: Handle 404 where gameId not longer exists
     const { data: { offer }, error } = await supabase
       .from<RTCGame>('game')
       .select('*')

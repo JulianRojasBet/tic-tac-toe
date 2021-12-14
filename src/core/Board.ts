@@ -1,7 +1,7 @@
 import type { Writable } from "svelte/store";
 
 import type Match from "$core/match/Match";
-import type { BoardRow, BoardRows, TilePosition } from "src/types";
+import type { BoardRows, TilePosition } from "src/types";
 
 import { get, writable } from "svelte/store";
 
@@ -28,7 +28,7 @@ export default class Board {
 
   constructor (match: Match) {
     this.match = match;
-    this.match.onselectile = this.selectTile.bind(this)
+    this.match.onselect = this.select.bind(this)
 
     const threeElements: [number, number, number] = [0, 1, 2];
     const rows = threeElements.map(
@@ -58,13 +58,15 @@ export default class Board {
       .map((row) => this.selected.call(this, row))
       .filter(row => row.length)
       .reduce((prev, row) => [ ...prev, ...row ], [])
-    
+
     return WIN_COMBINATIONS.some(
-      combination => combination.every(position => selected.includes(position))
+      combination => combination.every(
+        ([ x, y ]) => selected.find(([ _x, _y ]) => x === _x && y === _y)
+      )
     )
   }
 
-  public selectTile({ x, y }: TilePosition): void {
+  public select({ x, y }: TilePosition): void {
     const rows = get(this.rows);
     if (rows[x][y].selected) return
 
@@ -79,7 +81,6 @@ export default class Board {
       this.rows.set(rows);
     };
 
-    // TODO: Check if there is a winner
     const win = this.checkWin();
     if (win) console.log(`Player ${playing} win.`)
 
