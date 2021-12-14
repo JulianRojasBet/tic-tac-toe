@@ -59,3 +59,4 @@
 
 <!-- TODO: Add sounds: On click, on win, on lose, etc -->
 <!-- TODO: Prevent users to leave an in progress game -->
+<!-- TODO: Disabled board and tiles if there is a winner -->

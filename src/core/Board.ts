@@ -23,11 +23,13 @@ const WIN_COMBINATIONS: [number, number][][] = [
 ]
 
 export default class Board {
+  public winner: Writable<PlayerEnum>
   public rows: Writable<BoardRows>;
   private match: Match;
 
   constructor (match: Match) {
     this.match = match;
+    this.winner = writable(PlayerEnum.NONE);
     this.match.onselect = this.select.bind(this)
 
     const threeElements: [number, number, number] = [0, 1, 2];
@@ -43,7 +45,7 @@ export default class Board {
     this.rows = writable(rows) ;
   }
 
-  private selected(row): [number, number][] {
+  private getSelected(row): [number, number][] {
     const playing = get(this.match.playing)
 
     return row
@@ -51,11 +53,10 @@ export default class Board {
       .map(({ position: {x, y} }) => [ x, y ])
   }
 
-  // FIXME
   private checkWin() {
     const rows = get(this.rows)
     const selected = rows
-      .map((row) => this.selected.call(this, row))
+      .map(row => this.getSelected.call(this, row))
       .filter(row => row.length)
       .reduce((prev, row) => [ ...prev, ...row ], [])
 
@@ -67,8 +68,9 @@ export default class Board {
   }
 
   public select({ x, y }: TilePosition): void {
+    const winner = get(this.winner)
     const rows = get(this.rows);
-    if (rows[x][y].selected) return
+    if (rows[x][y].selected || winner !== PlayerEnum.NONE) return
 
     const playing = get(this.match.playing);
 
@@ -82,7 +84,10 @@ export default class Board {
     };
 
     const win = this.checkWin();
-    if (win) console.log(`Player ${playing} win.`)
+    if (win) {
+      this.winner.set(get(this.match.playing));
+      console.log(`Player ${playing} win.`);
+    }
 
     if (this.match instanceof NetworkMatch) {
       this.match.changeTurn({ x, y });
