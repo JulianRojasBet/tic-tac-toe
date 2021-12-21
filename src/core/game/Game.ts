@@ -21,7 +21,7 @@ class Game implements GameFactory {
     console.log('Game:', this.uuid);
   }
 
-  public start(mode = GameModeEnum.COMPUTER): Match {
+  public create(mode = GameModeEnum.COMPUTER): Match {
     let match = new ComputerMatch(this);
     if (mode === GameModeEnum.NETWORK) match = new NetworkMatch(this);
     else if (mode === GameModeEnum.LOCAL) match = new LocalMatch(this);

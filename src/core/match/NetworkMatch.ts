@@ -32,6 +32,10 @@ class NetworkMatch extends Mixin(Networking, Match) {
     super.changeTurn();
   }
 
+  finish(): void {
+    // this.shutdown()
+  }
+
   private onMessage(message: TilePosition) {
     this.onselect(message)
   }

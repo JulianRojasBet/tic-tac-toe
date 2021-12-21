@@ -60,7 +60,6 @@ abstract class Networking {
       .update({ offer })
       .eq('id', this.gameId);
 
-    // TODO: Unsubscribe (destroy/stop/finished method)
     // Listen for an answer
     supabase
       .from(`game:id=eq.${this.gameId}`)
@@ -149,6 +148,29 @@ abstract class Networking {
 
   public send(data): void {
     this.channel.send(JSON.stringify(data));
+  }
+
+  public async shutdown(): Promise<void> {
+    this.channel.close()
+    this.connection.close()
+
+    const subs = await supabase.getSubscriptions()
+    await Promise.all(subs.map(sub => supabase.removeSubscription(sub)))
+
+    await supabase
+      .from<RTCGame>('game')
+      .delete()
+      .eq('id', this.gameId)
+
+    await supabase
+      .from<RTCOfferAnswer>('offer')
+      .delete()
+      .eq('gameId', this.gameId)
+
+    await supabase
+      .from<RTCOfferAnswer>('answer')
+      .delete()
+      .eq('gameId', this.gameId)
   }
 }
 

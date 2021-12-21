@@ -7,7 +7,7 @@ interface GameFactory {
   uuid: UUID;
   player: Writable<PlayerEnum>;
 
-  start(mode: GameModeEnum): Match;
+  create(mode: GameModeEnum): Match;
 }
 
 export default GameFactory;

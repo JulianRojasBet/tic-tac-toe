@@ -30,6 +30,10 @@ abstract class Match {
     console.log('playing', get(this.playing))
   }
 
+  finish(): void {
+    // Should be implemented by each child
+  }
+
 }
 
 export default Match

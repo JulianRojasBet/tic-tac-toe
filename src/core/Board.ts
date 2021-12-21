@@ -86,7 +86,7 @@ export default class Board {
     const win = this.checkWin();
     if (win) {
       this.winner.set(get(this.match.playing));
-      console.log(`Player ${playing} win.`);
+      return
     }
 
     if (this.match instanceof NetworkMatch) {

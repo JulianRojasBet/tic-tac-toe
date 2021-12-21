@@ -1,20 +1,32 @@
 <script lang="ts">
   import PlayerEnum from "$lib/enums/PlayerEnum";
 
-  export let playing;
+  export let playing: PlayerEnum;
+  export let winner: PlayerEnum = PlayerEnum.NONE;
+
+  let score = {
+    [PlayerEnum.ONE]: 0,
+    [PlayerEnum.TWO]: 0
+  }
 
   $: isOne = playing === PlayerEnum.ONE;
   $: isTwo = playing === PlayerEnum.TWO;
+
+  $: if (winner !== PlayerEnum.NONE) {
+    score[winner] += 1;
+    score = score;
+    console.log(score)
+  }
 </script>
 
 <div class="score">
   <!-- TODO: Show animated score-number update -->
   <span class:isOne class="player-score one">
-    <p class="score-number">2</p>
+    <p class="score-number">{score[PlayerEnum.ONE]}</p>
     <h2 class="score-label">Player 1</h2>
   </span>
   <span class:isTwo class="player-score two">
-    <p class="score-number">2</p>
+    <p class="score-number">{score[PlayerEnum.TWO]}</p>
     <h2 class="score-label">Player 2</h2>
   </span>
 </div>
