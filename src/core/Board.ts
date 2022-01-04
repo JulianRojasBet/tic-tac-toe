@@ -23,13 +23,13 @@ const WIN_COMBINATIONS: [number, number][][] = [
 ]
 
 export default class Board {
-  public winner: Writable<PlayerEnum>
+  public winner: Writable<PlayerEnum | undefined>
   public rows: Writable<BoardRows>;
   private match: Match;
 
   constructor (match: Match) {
     this.match = match;
-    this.winner = writable(PlayerEnum.NONE);
+    this.winner = writable(undefined);
     this.match.onselect = this.select.bind(this)
 
     const threeElements: [number, number, number] = [0, 1, 2];
@@ -67,10 +67,16 @@ export default class Board {
     )
   }
 
+  public checkDraw(): boolean {
+    const rows = get(this.rows)
+    const winner = get(this.winner)
+    return !winner && rows.every(row => row.every(tile => tile.selected))
+  }
+
   public select({ x, y }: TilePosition): void {
     const winner = get(this.winner)
     const rows = get(this.rows);
-    if (rows[x][y].selected || winner !== PlayerEnum.NONE) return
+    if (rows[x][y].selected || winner !== undefined) return
 
     const playing = get(this.match.playing);
 
@@ -85,8 +91,19 @@ export default class Board {
 
     const win = this.checkWin();
     if (win) {
-      this.winner.set(get(this.match.playing));
-      return
+      const score = get(this.match.score)
+      const playing = get(this.match.playing)
+
+      this.winner.set(playing);
+      this.match.score.set({
+        ...score,
+        [playing]: score[playing] + 1
+      })
+    }
+
+    const draw = this.checkDraw()
+    if (draw) {
+      this.winner.set(PlayerEnum.NONE);
     }
 
     if (this.match instanceof NetworkMatch) {

@@ -30,7 +30,7 @@
 	let board = new Board(match);
 
 	$: ({ player } = game);
-	$: ({ gamemode, playing } = match);
+	$: ({ score, gamemode, playing } = match);
 	$: ({ rows, winner } = board);
 	$: boardDisabled = $playing !== $player;
 
@@ -52,14 +52,26 @@
 		match = game.create(mode);
 		board = new Board(match);
 	}
+
+	function handleNext() {
+		board = new Board(match);
+	}
+
+	function handleFinish() {
+		match.finish();
+		
+		game = new Game();
+		match = game.create();
+		board = new Board(match);
+	}
 </script>
 
-<WinScreen winner={$winner}/>
+<WinScreen winner={$winner} on:next={handleNext} on:finish={handleFinish} />
 
 <!-- TODO: Create a countdown for each player turn -->
 <div class="h-full flex flex-col items-center justify-center">
 	<section class="flex flex-col">
-		<Score playing={$playing} winner={$winner} />
+		<Score playing={$playing} winner={$winner} score={$score} />
 		<GameBoard rows={$rows} on:select={handleSeletTile} disabled={boardDisabled} />
 	</section>
 	<GameModes gameMode={gamemode} on:select={startMatch} />
@@ -68,3 +80,5 @@
 <!-- TODO: Add sounds: On click, on win, on lose, etc -->
 <!-- TODO: Prevent users to leave an in progress game -->
 <!-- TODO: Disabled board and tiles if there is a winner -->
+<!-- TODO: Handle win screen actions on network mode, sync both players -->
+<!-- TODO: Modal for network mode, create or join -->

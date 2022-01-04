@@ -1,5 +1,10 @@
 import type PlayerEnum from '$lib/enums/PlayerEnum';
 
+type Score = {
+  [PlayerEnum.ONE]: number,
+  [PlayerEnum.TWO]: number
+}
+
 type TilePosition = {
   x: number,
   y: number
@@ -15,4 +20,4 @@ type BoardRow = [ BoardTile, BoardTile, BoardTile ];
 
 type BoardRows = [ BoardRow, BoardRow, BoardRow ];
 
-export type { TilePosition, BoardTile, BoardRow, BoardRows };
+export type { Score, TilePosition, BoardTile, BoardRow, BoardRows };

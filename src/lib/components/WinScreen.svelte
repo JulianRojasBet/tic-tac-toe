@@ -1,17 +1,40 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	import { blur } from 'svelte/transition';
 
 	import PlayerEnum from '$lib/enums/PlayerEnum';
 
-	export let winner: PlayerEnum = PlayerEnum.NONE;
+	const dispatch = createEventDispatcher();
+
+	export let winner: PlayerEnum;
+
+	$: btnColor = winner === PlayerEnum.ONE ? 'btn-primary' : 'btn-accent';
+	$: borderColor = winner === PlayerEnum.ONE ? 'border-primary' : 'border-accent';
 </script>
 
-{#if winner !== PlayerEnum.NONE}
+{#if winner}
 	<div class="wrapper" transition:blur={{ duration: 200 }}>
 		<div class="black-drop" />
-		<div class="content">
-      <p>Player {winner} won!</p>
-      <!-- TODO: Add bottons tu finish match or start a new round -->
+		<div class="content {borderColor}">
+			{#if winner === PlayerEnum.NONE}
+				<p class="text-center text-3xl my-4">Draw!</p>
+			{:else}
+				<p class="text-center text-3xl my-4">Player {winner} won!</p>
+			{/if}
+			<div class="actions">
+				<button 
+					class="btn {btnColor} mr-4"
+					on:click={() => dispatch('next')}
+				>
+					Next round
+				</button>
+				<button 
+					class="btn btn-outline {btnColor}" 
+					on:click={() => dispatch('finish')}
+				>
+					Finish
+				</button>
+			</div>
 		</div>
 	</div>
 {/if}
@@ -24,7 +47,11 @@
 		@apply absolute inset-0 bg-black opacity-70 w-full h-full;
 	}
 	.content {
-    z-index: 1;
-		@apply p-4 rounded-lg bg-black text-primary-content border border-primary;
+		z-index: 1;
+		@apply max-w-md;
+		@apply p-4 rounded-lg bg-black text-primary-content border;
+	}
+	.actions {
+		@apply mt-8 flex justify-between;
 	}
 </style>
