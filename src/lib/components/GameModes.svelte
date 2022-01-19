@@ -9,6 +9,10 @@
   $: isNetwork = gameMode === GameModeEnum.NETWORK
 
 	const dispatch = createEventDispatcher();
+
+	function handleSelect(gamemode: GameModeEnum) {
+		window.location.hash = gamemode.toLocaleLowerCase();
+	}
 </script>
 
 <ul>
@@ -34,7 +38,7 @@
 		<button
 			class:isNetwork
 			class="btn btn-circle btn-lg"
-			on:click={() => dispatch('select', GameModeEnum.NETWORK)}
+			on:click={() => handleSelect(GameModeEnum.NETWORK)}
 		>
 		<img src="/src/assets/globe.svg" alt="Network">
 		</button>

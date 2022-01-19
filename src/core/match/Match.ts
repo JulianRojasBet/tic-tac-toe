@@ -32,7 +32,6 @@ abstract class Match {
 
   changeTurn(): void {
 		this.playing.set(nextTurn[get(this.playing)]);
-    console.log('playing', get(this.playing))
   }
 
   finish(): void {

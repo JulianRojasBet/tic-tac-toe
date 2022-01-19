@@ -18,10 +18,9 @@ class Game implements GameFactory {
   constructor(player = PlayerEnum.ONE, id = uuid()) {
     this.player = writable(player);
     this.uuid = id;
-    console.log('Game:', this.uuid);
   }
 
-  public create(mode = GameModeEnum.COMPUTER): Match {
+  public create(mode = GameModeEnum.LOCAL): Match {
     let match = new ComputerMatch(this);
     if (mode === GameModeEnum.NETWORK) match = new NetworkMatch(this);
     else if (mode === GameModeEnum.LOCAL) match = new LocalMatch(this);
