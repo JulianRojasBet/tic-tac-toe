@@ -12,13 +12,14 @@
 	import GameModeEnum from '$lib/enums/GameModeEnum';
 	import WinScreen from '$lib/components/WinScreen.svelte';
 	import NetworkModal from '$lib/components/NetworkModal.svelte';
+	import GameIdInput from '$lib/components/GameIdInput.svelte';
 
 	let game = new Game();
 	let match = game.create();
 	let board = new Board(match);
 
-	$: ({ player } = game);
-	$: ({ score, gamemode, playing } = match);
+	$: ({ uuid, player } = game);
+	$: ({ score, gamemode, playing, waiting } = match);
 	$: ({ rows, winner } = board);
 	$: boardDisabled = $playing !== $player;
 
@@ -71,13 +72,22 @@
 <div class="h-full flex flex-col items-center justify-center">
 	<section class="flex flex-col">
 		<Score playing={$playing} winner={$winner} score={$score} />
-		<GameBoard rows={$rows} on:select={handleSeletTile} disabled={boardDisabled} />
+		<GameBoard
+			rows={$rows}
+			waiting={$waiting}
+			disabled={boardDisabled}
+			on:select={handleSeletTile}
+		/>
 	</section>
 	<GameModes gameMode={gamemode} on:select={handleStart} />
+
+	{#if gamemode === GameModeEnum.NETWORK}
+		<div class="w-full my-6">
+			<GameIdInput gameId={uuid} readonly />
+		</div>
+	{/if}
 </div>
 
 <!-- TODO: Add sounds: On click, on win, on lose, etc -->
 <!-- TODO: Prevent users to leave an in progress game -->
-<!-- TODO: Disabled board and tiles if there is a winner -->
 <!-- TODO: Handle win screen actions on network mode, sync both players -->
-<!-- TODO: Modal for network mode, create or join -->

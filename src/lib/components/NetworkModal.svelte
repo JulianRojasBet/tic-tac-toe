@@ -1,15 +1,17 @@
 <script lang="ts">
-  import PlayerEnum from '$lib/enums/PlayerEnum';
-
 	import { createEventDispatcher } from 'svelte';
 	import { v4 as uuid } from 'uuid';
+
+	import PlayerEnum from '$lib/enums/PlayerEnum';
+	import GameIdInput from './GameIdInput.svelte';
+
+	const uuidPattern = /\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b/;
+	const dispatch = createEventDispatcher();
 
 	let id: UUID = '';
 	let gameId: UUID = '';
 
-	const dispatch = createEventDispatcher();
-
-	function handleCopy() {}
+	$: hasError = gameId && !gameId.match(uuidPattern);
 
 	function handleCreate() {
 		if (!gameId) id = gameId = uuid();
@@ -17,11 +19,10 @@
 
 	function handleJoin() {
 		if (gameId) {
-      const player = id === gameId ? PlayerEnum.ONE : PlayerEnum.TWO
+			const player = id === gameId ? PlayerEnum.ONE : PlayerEnum.TWO;
 			dispatch('join', { gameId, player });
 		}
 		handleClose();
-		// TODO: else show error
 	}
 
 	function handleClose() {
@@ -34,36 +35,29 @@
 
 <div id="network" class="modal" on:click|self={handleClose}>
 	<div class="modal-box">
-		<form>
-			<div class="form-control">
+		<div class="form-control">
+			<label class="label" for="gameId">
 				<span class="label-text ml-1">Game ID</span>
-				<label class="label">
-					<input
-						type="text"
-						placeholder="Enter the game ID"
-						class="input input-bordered w-full input-primary"
-						bind:value={gameId}
-					/>
-					<div class="copy" on:click={handleCopy}>
-						<img src="/src/assets/icons/copy.svg" alt="Copy" />
-					</div>
-				</label>
-			</div>
-		</form>
+			</label>
+			<GameIdInput bind:gameId {hasError} />
+			{#if gameId && !hasError}
+				<span class="hint">Share this game ID with your opponent</span>
+			{:else if hasError}
+				<span class="hint error">This game ID is not valid</span>
+			{/if}
+		</div>
 		<div class="modal-action">
 			<button class="btn btn-primary" on:click={handleCreate} disabled={!!gameId}> Create </button>
-			<button class="btn" on:click={handleJoin}> Join </button>
+			<button class="btn" on:click={handleJoin} disabled={!gameId || hasError}> Join </button>
 		</div>
 	</div>
 </div>
 
 <style lang="postcss">
-	img {
-		@apply w-5 h-5;
+	.hint {
+		@apply label-text-alt my-1 ml-2;
 	}
-	.copy {
-		@apply ml-2 p-3 rounded-full cursor-pointer;
-		@apply bg-primary hover:bg-primary-focus;
-		@apply border border-transparent;
+	.hint.error {
+		@apply text-error;
 	}
 </style>

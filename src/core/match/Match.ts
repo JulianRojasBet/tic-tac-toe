@@ -16,13 +16,15 @@ const nextTurn: Record<PlayerEnum, PlayerEnum> = {
 abstract class Match { 
   public game: Game
   public gamemode: GameModeEnum
-  public playing: Writable<PlayerEnum>;
   public score: Writable<Score>
+  public waiting: Writable<boolean>;
+  public playing: Writable<PlayerEnum>;
   public onselect: (position: TilePosition) => void
 
   constructor(game: Game, gamemode = GameModeEnum.COMPUTER) {
     this.game = game;
     this.gamemode = gamemode;
+    this.waiting = writable(false);
     this.playing = writable(PlayerEnum.ONE);
     this.score = writable({
       [PlayerEnum.ONE]: 0,

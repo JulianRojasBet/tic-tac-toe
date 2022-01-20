@@ -5,6 +5,7 @@ import type { TilePosition } from "src/types";
 
 import supabase from "$lib/utils/supabase";
 import { servers } from "$lib/utils/webRTC";
+import PlayerEnum from "$lib/enums/PlayerEnum";
 
 interface IceData {
   sdp?: string;
@@ -29,15 +30,33 @@ abstract class Networking {
   protected channel: RTCDataChannel;
   protected connection: RTCPeerConnection;
   protected onmessage: (event: TilePosition) => void
+  protected onconnected: () => void
 
   constructor(game: Game) {
     this.gameId = game.uuid
     this.connection = new RTCPeerConnection(servers);
 
-    this.connection.onconnectionstatechange = () => console.log('Connection state:', this.connection.connectionState)
-    this.connection.oniceconnectionstatechange = () => console.log('Ice connection state:', this.connection.iceConnectionState)
     this.connection.onicegatheringstatechange = () => console.log('Ice gathering state:', this.connection.iceGatheringState)
     this.connection.onsignalingstatechange = () => console.log('Signaling state:', this.connection.signalingState)
+  }
+
+  protected async init(): Promise<PlayerEnum> {
+    this.connection.onconnectionstatechange = this.handleConnectionState.bind(this)
+    this.connection.oniceconnectionstatechange = this.handleConnectionState.bind(this)
+
+    const { data: games, error } = await supabase
+    .from<RTCGame>('game')
+    .select('*')
+    .eq('id', this.gameId);
+
+    if (error) throw error;
+
+    if (!games.length) {
+      this.createOffer();
+      return PlayerEnum.ONE
+    } 
+    this.createAnswer(games[0])
+    return PlayerEnum.TWO
   }
 
   protected async createOffer(): Promise<void> {
@@ -67,18 +86,9 @@ abstract class Networking {
       .subscribe();
   }
 
-  protected async createAnswer(): Promise<void> {
+  protected async createAnswer({ offer }: RTCGame): Promise<void> {
     this.connection.onicecandidate = (evt) => this.handleIceCandidate('answer', evt)
     this.connection.ondatachannel = this.handleDataChannel.bind(this);
-
-    // TODO: Handle 404 where gameId not longer exists
-    const { data: { offer }, error } = await supabase
-      .from<RTCGame>('game')
-      .select('*')
-      .eq('id', this.gameId)
-      .single();
-
-    if (error) throw error;
 
     await this.connection.setRemoteDescription(offer);
     
@@ -104,6 +114,15 @@ abstract class Networking {
       .from(`offer:gameId=eq.${this.gameId}`)
       .on('INSERT', this.handleRemoteIceCandidate.bind(this))
       .subscribe();
+  }
+
+  private handleConnectionState() {
+    const iceConnectionState = this.connection.iceConnectionState
+    const connectionState = this.connection.connectionState
+
+    if (iceConnectionState === 'connected' || connectionState === 'connected') {
+      this.onconnected()
+    }
   }
 
   private async handleIceCandidate(table: string, { candidate }: RTCPeerConnectionIceEvent) {

@@ -5,9 +5,9 @@ import { get } from "svelte/store";
 import { Mixin } from 'ts-mixer';
 
 import GameModeEnum from "$lib/enums/GameModeEnum";
-import PlayerEnum from "$lib/enums/PlayerEnum";
 import Networking from "$core/mixins/Networking";
 import Match from "$core/match/Match";
+// import PlayerEnum from "$lib/enums/PlayerEnum";
 
 class NetworkMatch extends Mixin(Networking, Match) {
 
@@ -15,11 +15,10 @@ class NetworkMatch extends Mixin(Networking, Match) {
     super(game, GameModeEnum.NETWORK);
 
     this.onmessage = this.onMessage.bind(this)
+    this.onconnected = this.onConnected.bind(this)
+    this.waiting.set(true);
 
-    const player = get(this.game.player);
-    if (player === PlayerEnum.ONE) this.createOffer()
-    else if (player === PlayerEnum.TWO) this.createAnswer()
-
+    this.init().then(player => this.game.player.set(player))
   }
 
   changeTurn(position?: TilePosition): void {
@@ -38,6 +37,10 @@ class NetworkMatch extends Mixin(Networking, Match) {
 
   private onMessage(message: TilePosition) {
     this.onselect(message)
+  }
+
+  private onConnected() {
+    this.waiting.set(false)
   }
 }
 

@@ -10,7 +10,7 @@ const config = {
       current: 'currentColor',
 			black: colors.black,
 			white: colors.white,
-      gray: colors.coolGray,
+      gray: colors.gray,
       red: colors.red,
       teal: colors.teal,
       violet: colors.violet,
