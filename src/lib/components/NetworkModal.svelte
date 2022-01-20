@@ -45,7 +45,7 @@
 						bind:value={gameId}
 					/>
 					<div class="copy" on:click={handleCopy}>
-						<img src="/src/assets/copy.svg" alt="Copy" />
+						<img src="/src/assets/icons/copy.svg" alt="Copy" />
 					</div>
 				</label>
 			</div>

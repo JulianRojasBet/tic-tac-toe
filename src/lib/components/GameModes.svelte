@@ -22,7 +22,7 @@
 			class="btn btn-circle btn-lg"
 			on:click={() => dispatch('select', GameModeEnum.COMPUTER)}
 		>
-			<img src="/src/assets/cpu.svg" alt="Computer">
+			<img src="/src/assets/icons/cpu.svg" alt="Computer">
 		</button>
 	</li>
 	<li>
@@ -31,7 +31,7 @@
 			class="btn btn-circle btn-lg"
 			on:click={() => dispatch('select', GameModeEnum.LOCAL)}
 		>
-			<img src="/src/assets/friends.svg" alt="Local">
+			<img src="/src/assets/icons/friends.svg" alt="Local">
 		</button>
 	</li>
 	<li>
@@ -40,7 +40,7 @@
 			class="btn btn-circle btn-lg"
 			on:click={() => handleSelect(GameModeEnum.NETWORK)}
 		>
-		<img src="/src/assets/globe.svg" alt="Network">
+		<img src="/src/assets/icons/globe.svg" alt="Network">
 		</button>
 	</li>
 </ul>

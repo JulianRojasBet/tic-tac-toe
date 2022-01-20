@@ -78,6 +78,9 @@ export default class Board {
     const rows = get(this.rows);
     if (rows[x][y].selected || winner !== undefined) return
 
+    const tapAudio = new Audio('/src/assets/sounds/tap.wav');
+		tapAudio.play();
+
     const playing = get(this.match.playing);
 
     if (playing !== PlayerEnum.NONE) {
@@ -91,6 +94,9 @@ export default class Board {
 
     const win = this.checkWin();
     if (win) {
+      const winAudio = new Audio('/src/assets/sounds/win.wav');
+		  winAudio.play();
+
       const score = get(this.match.score)
       const playing = get(this.match.playing)
 
