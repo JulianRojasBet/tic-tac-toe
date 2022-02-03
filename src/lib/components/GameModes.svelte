@@ -13,6 +13,9 @@
 	function handleSelect(gamemode: GameModeEnum) {
 		window.location.hash = gamemode.toLocaleLowerCase();
 	}
+	function handleSelectComputer(gamemode: GameModeEnum) {
+		window.location.hash = gamemode.toLocaleLowerCase();
+	}
 </script>
 
 <ul>
@@ -20,7 +23,7 @@
 		<button
 			class:isComputer
 			class="btn btn-circle btn-lg"
-			on:click={() => dispatch('select', GameModeEnum.COMPUTER)}
+			on:click={() => dispatch('select', handleSelectComputer(GameModeEnum.COMPUTER))}
 		>
 			<img src="/src/assets/icons/cpu.svg" alt="Computer">
 		</button>
@@ -34,8 +37,8 @@
 			<img src="/src/assets/icons/friends.svg" alt="Local">
 		</button>
 	</li>
-	<li>
-		<button
+	<li> 
+		<button 
 			class:isNetwork
 			class="btn btn-circle btn-lg"
 			on:click={() => handleSelect(GameModeEnum.NETWORK)}

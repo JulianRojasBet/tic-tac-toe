@@ -1,5 +1,5 @@
 import type Game from "$core/game/Game";
-import type { TilePosition } from "src/types";
+import type { BoardRows, TilePosition } from "src/types";
 
 import { get } from "svelte/store";
 import { Mixin } from 'ts-mixer';
@@ -21,14 +21,14 @@ class NetworkMatch extends Mixin(Networking, Match) {
     this.init().then(player => this.game.player.set(player))
   }
 
-  changeTurn(position?: TilePosition): void {
+  changeTurn(rows:BoardRows, position?: TilePosition): void {
     const player = get(this.game.player)
     const playing = get(this.playing)
     if (position && player === playing) {
       this.send(position);
     }
 
-    super.changeTurn();
+    super.changeTurn(rows);
   }
 
   finish(): void {

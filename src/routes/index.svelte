@@ -13,6 +13,7 @@
 	import WinScreen from '$lib/components/WinScreen.svelte';
 	import NetworkModal from '$lib/components/NetworkModal.svelte';
 	import GameIdInput from '$lib/components/GameIdInput.svelte';
+	import GameLevelsModal from '$lib/components/GameLevelsModal.svelte';
 
 	let game = new Game();
 	let match = game.create();
@@ -39,6 +40,15 @@
 
 		game = new Game();
 		match = game.create(mode);
+		board = new Board(match);
+	}
+
+	function handleStartLevel(evt) {
+		const level = evt.detail;
+		match.finish();
+
+		game = new Game();
+		match = game.create(GameModeEnum.COMPUTER, level);
 		board = new Board(match);
 	}
 
@@ -84,6 +94,11 @@
 	{#if gamemode === GameModeEnum.NETWORK}
 		<div class="w-full my-6">
 			<GameIdInput gameId={uuid} readonly />
+		</div>
+	{/if}
+	{#if gamemode === GameModeEnum.COMPUTER}
+		<div class="w-full my-6">
+			<GameLevelsModal on:select={handleStartLevel} level={match.level}/>
 		</div>
 	{/if}
 </div>
