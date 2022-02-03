@@ -22,6 +22,9 @@
 	$: ({ score, gamemode, playing, waiting } = match);
 	$: ({ rows, winner } = board);
 	$: boardDisabled = $playing !== $player;
+	$: if (match) {
+		match.onfinish = handleFinish
+	}
 
 	setContext('player', player);
 
@@ -43,6 +46,7 @@
 	}
 
 	function handleNext() {
+		match.next();
 		board = new Board(match);
 	}
 
@@ -90,4 +94,7 @@
 
 <!-- TODO: Add sounds: On click, on win, on lose, etc -->
 <!-- TODO: Prevent users to leave an in progress game -->
-<!-- TODO: Handle win screen actions on network mode, sync both players -->
+<!-- TODO: Show toast when copy a game id  -->
+<!-- TODO: Show toast when an user the opponent finish the game  -->
+<!-- TODO: On draw change the color of the modal -->
+<!-- FIXME: If the players join at "same" time error -->
