@@ -64,8 +64,7 @@ class ComputerMatch extends Match {
           }
         }
       }
-
-      if (this.level === LevelEnum.NORMAL && turns_played < 2) {
+      if (this.level === LevelEnum.NORMAL && turns_played < 2 && turns_played >0) {
         let move = available[Math.floor(Math.random()*available.length)];
         bestMove = {x:move.x, y:move.y}
       }
@@ -74,8 +73,9 @@ class ComputerMatch extends Match {
         let move = available[Math.floor(Math.random()*available.length)];
         bestMove = {x:move.x, y:move.y}
       }
-      
-      this.onselect(bestMove)
+      if (turns_played > 0) {
+        this.onselect(bestMove)
+      }
     }
   }
 
