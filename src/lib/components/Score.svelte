@@ -63,5 +63,6 @@
 	.isOne,
 	.isTwo {
 		transform: scale(1.5);
+		@apply z-10;
 	}
 </style>

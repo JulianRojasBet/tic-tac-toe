@@ -10,9 +10,11 @@ import GameModeEnum from "$lib/enums/GameModeEnum";
 import Networking from "$core/mixins/Networking";
 import RoundEnum from "$lib/enums/RoundEnum";
 import ChannelMessageTypeEnum from "$lib/enums/ChannelMessageTypeEnum";
+import { notifications } from '$lib/stores/notifications'
 
 class NetworkMatch extends Mixin(Networking, Match) {
   private wantNext = false;
+  private wantFinish = false;
 
   constructor(game: Game) {
     super(game, GameModeEnum.NETWORK);
@@ -38,11 +40,12 @@ class NetworkMatch extends Mixin(Networking, Match) {
   }
 
   finish(): void {
+    this.wantFinish = true
     this.send({
       type: ChannelMessageTypeEnum.ROUND,
       payload: RoundEnum.FINISH
     })
-    // this.shutdown()
+    this.shutdown()
   }
   
   next(): void {
@@ -58,18 +61,15 @@ class NetworkMatch extends Mixin(Networking, Match) {
       type: ChannelMessageTypeEnum.ROUND,
       payload: RoundEnum.NEXT
     })
-    console.log('next', this.wantNext)
   }
 
   private onMessage({ type, payload }: ChannelMessage) {
-    console.log(type, payload)
     if (type === ChannelMessageTypeEnum.MOVEMENT) {
       this.onselect(payload as TilePosition)
       return
     }
 
     if (payload === RoundEnum.NEXT) {
-      console.log('message', this.wantNext)
       if (this.wantNext) {
         this.waiting.set(false)
         this.wantNext = false
@@ -81,7 +81,11 @@ class NetworkMatch extends Mixin(Networking, Match) {
 
     this.wantNext = false
     this.waiting.set(false)
+    if (!this.wantFinish) {
+      notifications.send('Your opponent finished the match')
+    }
     this.onfinish()
+    this.wantFinish = false
   }
 
   private onConnected() {

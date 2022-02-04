@@ -13,6 +13,7 @@
 	import WinScreen from '$lib/components/WinScreen.svelte';
 	import NetworkModal from '$lib/components/NetworkModal.svelte';
 	import GameIdInput from '$lib/components/GameIdInput.svelte';
+	import Toast from '$lib/components/Toast.svelte';
 
 	let game = new Game();
 	let match = game.create();
@@ -71,6 +72,7 @@
 
 <WinScreen winner={$winner} on:next={handleNext} on:finish={handleFinish} />
 <NetworkModal on:join={handleJoin} />
+<Toast />
 
 <!-- TODO: Create a countdown for each player turn -->
 <div class="h-full flex flex-col items-center justify-center">
@@ -94,7 +96,5 @@
 
 <!-- TODO: Add sounds: On click, on win, on lose, etc -->
 <!-- TODO: Prevent users to leave an in progress game -->
-<!-- TODO: Show toast when copy a game id  -->
-<!-- TODO: Show toast when an user the opponent finish the game  -->
 <!-- TODO: On draw change the color of the modal -->
 <!-- FIXME: If the players join at "same" time error -->
