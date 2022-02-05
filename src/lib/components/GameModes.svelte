@@ -25,8 +25,9 @@
 			class="btn btn-circle btn-lg"
 			on:click={() => dispatch('select', handleSelectComputer(GameModeEnum.COMPUTER))}
 		>
-			<img src="/src/assets/icons/cpu.svg" alt="Computer">
+			<img src="/assets/icons/cpu.svg" alt="Computer">
 		</button>
+		<p>Computer</p>
 	</li>
 	<li>
 		<button
@@ -34,8 +35,9 @@
 			class="btn btn-circle btn-lg"
 			on:click={() => dispatch('select', GameModeEnum.LOCAL)}
 		>
-			<img src="/src/assets/icons/friends.svg" alt="Local">
+			<img src="/assets/icons/friends.svg" alt="Local">
 		</button>
+		<p>Local</p>
 	</li>
 	<li> 
 		<button 
@@ -43,14 +45,21 @@
 			class="btn btn-circle btn-lg"
 			on:click={() => handleSelect(GameModeEnum.NETWORK)}
 		>
-		<img src="/src/assets/icons/globe.svg" alt="Network">
+		<img src="/assets/icons/globe.svg" alt="Network">
 		</button>
+		<p>Network</p>
 	</li>
 </ul>
 
 <style lang="postcss">
 	ul {
 		@apply w-full flex justify-around;
+	}
+	li {
+		@apply flex flex-col items-center
+	}
+	li > p {
+		@apply font-mono font-extrabold mt-1;
 	}
 	button {
 		@apply border-b-4 border-r-4 border-neutral-focus bg-gray-500 transition-all;

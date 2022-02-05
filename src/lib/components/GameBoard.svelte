@@ -14,7 +14,7 @@
 	{#if waiting}
 		<div class="waiting" transition:fade={{ duration: 300 }}>
 			<p>Waiting your opponent</p>
-			<img class="spinner" src="/src/assets/icons/spinner.svg" alt="Waiting" />
+			<img class="spinner" src="/assets/icons/spinner.svg" alt="Waiting" />
 		</div>
 	{/if}
 	<tbody>
