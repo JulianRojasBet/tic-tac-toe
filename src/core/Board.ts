@@ -98,8 +98,9 @@ export default class Board {
     const rows = get(this.rows);
     if (rows[x][y].selected || winner !== undefined) return
 
-		tapAudio.load();
-		tapAudio.play();
+    tapAudio.pause();
+		tapAudio.currentTime = 0
+    tapAudio.play();
 
     const playing = get(this.match.playing);
 
