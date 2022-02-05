@@ -30,7 +30,7 @@
 		bind:value={gameId}
 	/>
 	<button class="btn absolute top-0 right-0 rounded-l-none {btnClass}" on:click={handleCopy}>
-		<img src="/src/assets/icons/copy.svg" alt="Copy" />
+		<img src="/assets/icons/copy.svg" alt="Copy" />
 	</button>
 </div>
 

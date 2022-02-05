@@ -172,7 +172,9 @@ abstract class Networking {
     }
   }
 
-  public send(data): void {
+  public send(data: ChannelMessage): void {
+    if (this.channel.readyState !== 'open') return
+
     this.channel.send(JSON.stringify(data));
   }
 
