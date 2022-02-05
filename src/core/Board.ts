@@ -7,8 +7,6 @@ import { get, writable } from "svelte/store";
 
 import PlayerEnum from "$lib/enums/PlayerEnum";
 import NetworkMatch from '$core/match/NetworkMatch';
-import { compute_slots } from "svelte/internal";
-import GameModeEnum from "$lib/enums/GameModeEnum";
 import ComputerMatch from "./match/ComputerMatch";
 
 const WIN_COMBINATIONS: [number, number][][] = [
@@ -50,9 +48,10 @@ export default class Board {
     this.rows = writable(rows) ;
 
     if (this.match instanceof ComputerMatch && playing === PlayerEnum.TWO){
-      //this.match.playing = writable(PlayerEnum.ONE)
-      //this.match.game.player = writable(PlayerEnum.ONE)
-      this.select({x:1,y:2})
+      const x = Math.floor(Math.random() * 3)
+      const y = Math.floor(Math.random() * 3)
+      console.log(x, y)
+      setTimeout(() => this.select({x, y}), 300)
     } 
     
   }

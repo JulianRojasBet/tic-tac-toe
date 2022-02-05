@@ -111,5 +111,4 @@
 
 <!-- TODO: Add sounds: On click, on win, on lose, etc -->
 <!-- TODO: Prevent users to leave an in progress game -->
-<!-- TODO: On draw change the color of the modal -->
 <!-- FIXME: If the players join at "same" time error -->
