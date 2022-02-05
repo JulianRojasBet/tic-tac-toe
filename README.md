@@ -1,38 +1,20 @@
-# create-svelte
+**Description** 
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
+Tic tac toe is a game in which two players alternately put Xs and Os in compartments of a figure formed by two vertical lines crossing two horizontal lines and each tries to get a row of three Xs or three Os before the opponent does.
 
-## Creating a project
+For their develop we use Typescript, Svelte and other tools as tailwindcss and daisyUI.
 
-If you're seeing this, you've probably already done this step. Congrats!
+This game has tree game modes:
 
-```bash
-# create a new project in the current directory
-npm init svelte@next
+- **Computer**: This game mode consists of playing against the computer that performs automatic movements. It consists of three levels: Easy, normal and difficult. Normal and difficult levels have implemented an artificial intelligence algorithm known as minimax which allows to anticipate the movements and in case of maximum difficulty make it invincible.
 
-# create a new project in my-app
-npm init svelte@next my-app
-```
+- **Local**: This game mode allows you to play with a partner on the same computer.
 
-> Note: the `@next` is temporary
+- **Network**: The last option to choose as a game mode is network that allows you to play with a partner in different computers, you can create a game and share and ID game for your partner join or you can join it if you have an id.
 
-## Developing
+***illustrative image***
+![alt text](https://i.imgur.com/qXadvKv.png)
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+The deployment was made in Netlify and WebRTC, The game can be accessed through the following link: https://triqui.netlify.app
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
-
-```bash
-npm run build
-```
-
-> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
+If you want to run it use: *npm run dev*
