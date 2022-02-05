@@ -1,6 +1,7 @@
 import type Game from "$core/game/Game";
-import type { Score, TilePosition } from 'src/types';
+import type { BoardRows, Score, TilePosition } from 'src/types';
 import type { Writable } from "svelte/store";
+import type LevelEnum from "$lib/enums/LevelEnum";
 
 import { get, writable } from "svelte/store";
 
@@ -20,6 +21,7 @@ abstract class Match {
   public waiting: Writable<boolean>;
   public playing: Writable<PlayerEnum>;
   public onselect: (position: TilePosition) => void
+  public level: LevelEnum;
   public onfinish: () => void
 
   constructor(game: Game, gamemode = GameModeEnum.COMPUTER) {
@@ -33,7 +35,7 @@ abstract class Match {
     })
   }
 
-  changeTurn(): void {
+  changeTurn(rows:BoardRows): void {
 		this.playing.set(nextTurn[get(this.playing)]);
   }
 

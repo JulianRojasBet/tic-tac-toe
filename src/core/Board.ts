@@ -7,6 +7,9 @@ import { get, writable } from "svelte/store";
 
 import PlayerEnum from "$lib/enums/PlayerEnum";
 import NetworkMatch from '$core/match/NetworkMatch';
+import { compute_slots } from "svelte/internal";
+import GameModeEnum from "$lib/enums/GameModeEnum";
+import ComputerMatch from "./match/ComputerMatch";
 
 const WIN_COMBINATIONS: [number, number][][] = [
   // In row
@@ -31,6 +34,8 @@ export default class Board {
     this.match = match;
     this.winner = writable(undefined);
     this.match.onselect = this.select.bind(this)
+    const playing = get(this.match.playing)
+    
 
     const threeElements: [number, number, number] = [0, 1, 2];
     const rows = threeElements.map(
@@ -43,11 +48,17 @@ export default class Board {
       )
     ) as BoardRows
     this.rows = writable(rows) ;
+
+    if (this.match instanceof ComputerMatch && playing === PlayerEnum.TWO){
+      //this.match.playing = writable(PlayerEnum.ONE)
+      //this.match.game.player = writable(PlayerEnum.ONE)
+      this.select({x:1,y:2})
+    } 
+    
   }
 
   private getSelected(row): [number, number][] {
     const playing = get(this.match.playing)
-
     return row
       .filter(({ selected, playedBy }) => selected && playedBy === playing)
       .map(({ position: {x, y} }) => [ x, y ])
@@ -113,9 +124,14 @@ export default class Board {
     }
 
     if (this.match instanceof NetworkMatch) {
-      this.match.changeTurn({ x, y });
+      this.match.changeTurn(rows, { x, y });
     } else {
-      this.match.changeTurn();
+      //console.log(rows)
+      this.match.changeTurn(rows);
     }
+
+    // if (playing == PlayerEnum.TWO && this.match.gamemode==GameModeEnum.COMPUTER) {
+    //   console.log(this.match)
+    // }
   }
 }
