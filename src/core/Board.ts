@@ -3,11 +3,21 @@ import type { Writable } from "svelte/store";
 import type Match from "$core/match/Match";
 import type { BoardRows, TilePosition } from "src/types";
 
+import { browser  } from "$app/env";
 import { get, writable } from "svelte/store";
 
+// import { tapAudio, winAudio } from "$lib/utils/audio"
 import PlayerEnum from "$lib/enums/PlayerEnum";
 import NetworkMatch from '$core/match/NetworkMatch';
 import ComputerMatch from "./match/ComputerMatch";
+
+let tapAudio: HTMLAudioElement
+let winAudio: HTMLAudioElement
+
+if (browser) {
+  tapAudio = new Audio('/assets/sounds/tap.wav');
+  winAudio = new Audio('/assets/sounds/win.wav');
+}
 
 const WIN_COMBINATIONS: [number, number][][] = [
   // In row
@@ -88,7 +98,7 @@ export default class Board {
     const rows = get(this.rows);
     if (rows[x][y].selected || winner !== undefined) return
 
-    const tapAudio = new Audio('/assets/sounds/tap.wav');
+		tapAudio.load();
 		tapAudio.play();
 
     const playing = get(this.match.playing);
@@ -104,7 +114,6 @@ export default class Board {
 
     const win = this.checkWin();
     if (win) {
-      const winAudio = new Audio('/assets/sounds/win.wav');
 		  winAudio.play();
 
       const score = get(this.match.score)
