@@ -133,6 +133,7 @@ abstract class Networking {
   }
 
   private async handleIceCandidate(table: string, { candidate }: RTCPeerConnectionIceEvent) {
+    console.log(table, candidate)
     if (candidate) {
       const { error } = await supabase
         .from(table)
