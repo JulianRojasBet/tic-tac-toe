@@ -22,6 +22,7 @@ abstract class Match {
   public playing: Writable<PlayerEnum>;
   public onselect: (position: TilePosition) => void
   public level: LevelEnum;
+  public onfinish: () => void
 
   constructor(game: Game, gamemode = GameModeEnum.COMPUTER) {
     this.game = game;
@@ -39,6 +40,10 @@ abstract class Match {
   }
 
   finish(): void {
+    // Should be implemented by each child
+  }
+
+  next(): void {
     // Should be implemented by each child
   }
 

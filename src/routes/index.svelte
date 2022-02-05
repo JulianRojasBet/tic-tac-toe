@@ -14,6 +14,7 @@
 	import NetworkModal from '$lib/components/NetworkModal.svelte';
 	import GameIdInput from '$lib/components/GameIdInput.svelte';
 	import GameLevelsModal from '$lib/components/GameLevelsModal.svelte';
+	import Toast from '$lib/components/Toast.svelte';
 
 	let game = new Game();
 	let match = game.create();
@@ -23,6 +24,9 @@
 	$: ({ score, gamemode, playing, waiting } = match);
 	$: ({ rows, winner } = board);
 	$: boardDisabled = $playing !== $player;
+	$: if (match) {
+		match.onfinish = handleFinish
+	}
 
 	setContext('player', player);
 
@@ -53,6 +57,7 @@
 	}
 
 	function handleNext() {
+		match.next();
 		board = new Board(match);
 	}
 
@@ -77,6 +82,7 @@
 
 <WinScreen winner={$winner} on:next={handleNext} on:finish={handleFinish} />
 <NetworkModal on:join={handleJoin} />
+<Toast />
 
 <!-- TODO: Create a countdown for each player turn -->
 <div class="h-full flex flex-col items-center justify-center">
@@ -105,4 +111,5 @@
 
 <!-- TODO: Add sounds: On click, on win, on lose, etc -->
 <!-- TODO: Prevent users to leave an in progress game -->
-<!-- TODO: Handle win screen actions on network mode, sync both players -->
+<!-- TODO: On draw change the color of the modal -->
+<!-- FIXME: If the players join at "same" time error -->

@@ -6,10 +6,8 @@
 	<slot />
 </main>
 
-
 <style lang="postcss">
 	main {
-		max-width: fit-content;
-		@apply mx-auto p-4 h-screen;
+		@apply max-w-md p-4 h-screen;
 	}
 </style>

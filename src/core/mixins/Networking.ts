@@ -2,6 +2,8 @@ import type { SupabaseRealtimePayload } from "@supabase/supabase-js";
 
 import type Game from "$core/game/Game";
 import type { TilePosition } from "src/types";
+import type RoundEnum from "$lib/enums/RoundEnum";
+import type ChannelMessageTypeEnum from "$lib/enums/ChannelMessageTypeEnum";
 
 import supabase from "$lib/utils/supabase";
 import { servers } from "$lib/utils/webRTC";
@@ -25,11 +27,16 @@ interface RTCOfferAnswer {
   created_at: string;
 }
 
+interface ChannelMessage {
+  type: ChannelMessageTypeEnum,
+  payload: TilePosition | RoundEnum
+}
+
 abstract class Networking {
   private gameId: UUID;
   protected channel: RTCDataChannel;
   protected connection: RTCPeerConnection;
-  protected onmessage: (event: TilePosition) => void
+  protected onmessage: (msg: ChannelMessage) => void
   protected onconnected: () => void
 
   constructor(game: Game) {
@@ -147,7 +154,7 @@ abstract class Networking {
   }
 
   private handleMessage({ data }: MessageEvent<string>) {
-    const message = JSON.parse(data)
+    const message: ChannelMessage = JSON.parse(data)
     this.onmessage(message)
   }
 
@@ -193,4 +200,5 @@ abstract class Networking {
   }
 }
 
-export default Networking;
+export default Networking; 
+export type { ChannelMessage };

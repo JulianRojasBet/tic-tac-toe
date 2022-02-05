@@ -8,8 +8,18 @@
 
 	export let winner: PlayerEnum;
 
-	$: btnColor = winner === PlayerEnum.ONE ? 'btn-primary' : 'btn-accent';
-	$: borderColor = winner === PlayerEnum.ONE ? 'border-primary' : 'border-accent';
+	$: btnColor =
+		winner === PlayerEnum.NONE
+			? 'btn-neutral'
+			: winner === PlayerEnum.ONE
+				? 'btn-primary'
+				: 'btn-accent';
+	$: borderColor =
+		winner === PlayerEnum.NONE
+			? 'border-neutral'
+			: winner === PlayerEnum.ONE
+				? 'border-primary'
+				: 'border-accent';
 </script>
 
 {#if winner}
@@ -19,19 +29,13 @@
 			{#if winner === PlayerEnum.NONE}
 				<p class="text-center text-3xl my-4">Draw!</p>
 			{:else}
-				<p class="text-center text-3xl my-4">Player {winner} won!</p>
+				<p class="text-center text-3xl my-4">Player {winner} win!</p>
 			{/if}
 			<div class="actions">
-				<button 
-					class="btn {btnColor} mr-4"
-					on:click={() => dispatch('next')}
-				>
+				<button class="btn {btnColor} mr-4" on:click={() => dispatch('next')}>
 					Next round
 				</button>
-				<button 
-					class="btn btn-outline {btnColor}" 
-					on:click={() => dispatch('finish')}
-				>
+				<button class="btn btn-outline {btnColor}" on:click={() => dispatch('finish')}>
 					Finish
 				</button>
 			</div>
@@ -41,7 +45,7 @@
 
 <style lang="postcss">
 	.wrapper {
-		@apply absolute inset-0 flex justify-center items-center w-screen h-screen;
+		@apply z-10 absolute inset-0 flex justify-center items-center w-screen h-screen;
 	}
 	.black-drop {
 		@apply absolute inset-0 bg-black opacity-70 w-full h-full;

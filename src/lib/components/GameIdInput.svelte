@@ -1,5 +1,6 @@
 <script lang="ts">
 	import copy from '$lib/utils/copy';
+	import { notifications } from '$lib/stores/notifications'
 
 	export let gameId: UUID;
 	export let hasError = false;
@@ -11,7 +12,10 @@
 	$: btnClass = hasError ? 'btn-error' : _btnClass;
 
 	function handleCopy() {
+		if (!gameId) return;
+		
 		copy(gameId);
+		notifications.send('Game ID copied to clipboard')
 	}
 </script>
 
@@ -22,7 +26,7 @@
 		placeholder="Enter the game ID to join"
 		class="w-full input input-bordered {inputClass}"
 		autocomplete="off"
-    {readonly}
+		{readonly}
 		bind:value={gameId}
 	/>
 	<button class="btn absolute top-0 right-0 rounded-l-none {btnClass}" on:click={handleCopy}>

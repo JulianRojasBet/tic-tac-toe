@@ -13,7 +13,6 @@ class LocalMatch extends Match {
 
   changeTurn(): void {
     super.changeTurn();
-    // TODO: Change game player to enable it to select a tile
     this.game.player.set(get(this.playing))
   }
 }
