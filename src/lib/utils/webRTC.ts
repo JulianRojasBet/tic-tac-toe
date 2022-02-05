@@ -2,8 +2,8 @@ const servers = {
   iceServers: [
     {
       urls: [
-        "stun:stun3.l.google.com:19302",
-        "stun:stun4.l.google.com:19302",
+        "stun:stun.services.mozilla.com",
+        "stun:stun.l.google.com:19302",
       ],
     },
   ],
