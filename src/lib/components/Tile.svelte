@@ -18,7 +18,7 @@
 
 <style lang="postcss">
 	td {
-		--size: min(128px, 30vw);
+		--size: min(128px, calc(30vw - 0.5rem));
 		width: var(--size);
 		height: var(--size);
 		@apply p-4 bg-base-200 rounded-xl border-b-4 border-r-2 border-base-300;

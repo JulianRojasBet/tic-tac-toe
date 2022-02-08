@@ -31,7 +31,7 @@
 <style lang="postcss">
 	table {
 		border-spacing: 5px;
-		@apply border-separate my-4 p-4;
+		@apply border-separate my-4;
 	}
 	.disabled {
 		@apply cursor-not-allowed pointer-events-none;
